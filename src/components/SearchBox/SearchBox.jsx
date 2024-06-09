@@ -1,22 +1,16 @@
-import TransactionHistoryItem from '../TransactionHistoryItem/TransactionHistoryItem';
-import styles from './TransactionHistory.module.css'
+import css from './SearchBox.module.css'
 
-const TransactionHistory = ({ transactions }) => {
-  return (
-    <table className={styles.transactionHistory}>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Amount</th>
-      <th>Currency</th>
-    </tr>
-  </thead>
+export default function SearchBox({ value, onFilter }){
 
-    <tbody>
-        {transactions.map((transaction,index) => <TransactionHistoryItem index={index} key={transaction.id} type={transaction.type} amount={transaction.amount} currency={transaction.currency} />)}
-  </tbody>
-</table>
-  );
-};
-
-export default TransactionHistory
+    return (
+        <div className={css.box}>
+          <p className={css.label}>Find contact by name</p>
+          <input className={css.input}
+            type="text"
+            value={value}
+            onChange={(e) => onFilter(e.target.value)}
+          />
+        </div>
+      );
+    
+}

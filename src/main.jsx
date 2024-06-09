@@ -1,16 +1,11 @@
-export default function Searchbox({ searchQuery, setSearchQuery }) {
- const handleChange = (event) => {
-    setSearchQuery(event.target.value);
- };
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './components/App'
+import './index.css'
+import "modern-normalize";
 
- return (
-    <div className="search-box">
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={handleChange}
-      />
-    </div>
- );
-}
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)

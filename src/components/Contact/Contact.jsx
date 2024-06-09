@@ -1,14 +1,21 @@
-import { FaPhone } from "react-icons/fa6";
+import { FaPhoneAlt } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
+import css from './Contact.module.css'
 
-export default function Contact({ id, name, number, deleteId }) {
- return (
-                  <li key={id}>
-          <div className="contact-list-div">
-            <span><IoPerson />{" "+name}</span>
-            <span><FaPhone />{" "+number}</span>
-          </div>
-          <button onClick={() => deleteId(id)}>Delete</button>
-        </li>
- );
+
+export default function ContactItem ({contact:{ id, name, number}, onDelete}){
+    return (
+        <div className={css.fullContact}>
+          <div className={css.contactInfo}>
+         
+          <p><IoPerson />   {name}</p>
+          <p><FaPhoneAlt />   {number}</p>
+          </div>        
+
+             <button className={css.btn} onClick={() => onDelete(id)}>
+        Delete
+      </button>
+
+        </div>
+    )
 }
