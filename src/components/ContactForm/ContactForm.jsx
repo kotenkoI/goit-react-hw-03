@@ -1,73 +1,43 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useId } from "react";
-import * as Yup from "yup";
-import { nanoid } from "nanoid";
+import {Formik, Form, Field, ErrorMessage} from "formik"
+import { nanoid } from "nanoid"
+import { useId } from "react"
+import * as Yup from "yup"
+import css from "./ContactForm.module.css"
 
-import css from "./ContactForm.module.css";
+export default function ContactForm({ onAdd }) {
 
-export default function ContactList({ addContact }) {
-  const nameFieldId = useId();
-  const numberFieldId = useId();
+    const initialValues = { name: "", number: "" };
+    
+    const nameFieldId = useId();
+    const numberFieldId = useId();
 
-  const validationControl = Yup.object().shape({
-    name: Yup.string()
-      .min(3, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    number: Yup.string()
-      .min(3, "Too short")
-      .max(12, "Too long")
-      .required("Required"),
-  });
+    const handleSubmit = (values, actions) => {
+        onAdd({...values, id: nanoid()})
+        actions.resetForm()
+    }
 
-  const initialContact = {
-    name: "",
-    number: "",
-  };
+    const ValidationSchema = Yup.object().shape({
+        name: Yup.string().min(3, "Too short name, minimum 3 symbols").max(30, "Too long name, maximum 30 symbols").required("Here is required field"),
+        number: Yup.string().matches(/[0-9-]+$/, "Invalid symbols, please, use only numbers").min(3, "Example: 111-11-11 or +(38)050-123-12-33").required("Here is a required field")
+    })
 
-  const handleSubmit = (values, actions) => {
-    addContact({
-      id: nanoid(),
-      name: values.name,
-      number: values.number,
-    });
-
-    actions.resetForm();
-  };
-
-  return (
-    <Formik
-      initialValues={initialContact}
-      onSubmit={handleSubmit}
-      validationSchema={validationControl}
-    >
-      <Form className={css.formStyle}>
-        <div className={css.fialdStyle}>
-          <label htmlFor={nameFieldId}>Name</label>
-          <Field
-            className={css.field}
-            id={nameFieldId}
-            type="text"
-            name="name"
-          />
-          <ErrorMessage className={css.err} name="name" component="span" />
-        </div>
-
-        <div className={css.fialdStyle}>
-          <label htmlFor={numberFieldId}>Number</label>
-          <Field
-            className={css.field}
-            id={numberFieldId}
-            type="tel"
-            name="number"
-          />
-          <ErrorMessage className={css.err} name="number" component="span" />
-        </div>
-
-        <button type="submit" className={css.btn}>
-          Add contact
-        </button>
-      </Form>
-    </Formik>
-  );
+    return (
+    <div>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={ValidationSchema}>
+                <Form className={css.form}>
+                    <div className={css.formField}>
+                        <label htmlFor={nameFieldId}>Name</label>
+                        <Field className={css.input} type="text" name="name" id={nameFieldId} />
+                        <ErrorMessage className={css.error} name="name" component="span" />
+                    </div>
+                    <div className={css.formField}>
+                        <label htmlFor={numberFieldId}>Number</label>
+                        <Field className={css.input} type="text" name="number" id={numberFieldId} />
+                        <ErrorMessage className={css.error} name="number" component="span" />
+                    </div>
+                    <button className={css.button} type="submit">Add contact</button>
+                </Form>
+        </Formik>
+    </div>
+    )
 }
